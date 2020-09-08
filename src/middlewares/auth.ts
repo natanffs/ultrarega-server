@@ -3,14 +3,14 @@ import jwt from 'jsonwebtoken'
 
 interface Idecoded {
     id: Number,
-    level: Number
+    permissions: []
 }
 
 declare global {
     namespace Express {
         interface Request {
             userId: Number,
-            userLevel: Number
+            userPermissions: []
         }
     }
 }
@@ -34,11 +34,11 @@ export default (req: Request, res: Response, next: NextFunction) => {
     jwt.verify(token,  process.env.SECRET || 'beterraba-vermelha', (err, decoded) => {
         if (err) return res.status(401).json({ error: 'Token inválido' })
         
-        const { id, level } = (decoded as Idecoded)
+        const { id, permissions } = (decoded as Idecoded)
         
         req.userId = id
-        req.userLevel = level
-
-        return next()
+        req.userPermissions = permissions
     })
+    
+    return next()
 }

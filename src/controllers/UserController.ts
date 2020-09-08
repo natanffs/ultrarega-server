@@ -2,13 +2,23 @@ import { Request, Response } from 'express'
 import knex from '../database/connection'
 import bcrypt from 'bcrypt'
 
+interface userI {
+    id: Number,
+    nome: String,
+    email: String,
+    senha: String,
+    permissoes: [Number]
+}
+
 class UserController {
 
     async index(req: Request, res: Response) {
         try {
-            const users = await knex('usuario').select('*')
+            const users: userI[] = await knex('usuario').select('*')
 
-            users.map(u => u.senha = undefined)
+            users.map(u => {
+                u.senha = undefined
+            })
 
             return res.json(users)
         } catch (error) {

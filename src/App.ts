@@ -2,22 +2,27 @@ import express, { Application } from 'express'
 import * as dotenv from 'dotenv'
 import cors from 'cors'
 import morgan from 'morgan'
+import http, { Server } from 'http'
+import { setupWebsocket } from './websocket'
 import * as routes from './routes'
 import authMiddleware from './middlewares/auth'
 
 export class App {
     private app: Application
+    private server: Server
 
     constructor() {
         dotenv.config()
         this.app = express()
+        this.server = http.createServer(this.app)
+
         this.settings()
         this.middlewares()
         this.routes()
     }
 
     private settings() {
-        
+        setupWebsocket(this.server)
     }
 
     private middlewares() {
@@ -45,7 +50,7 @@ export class App {
     }
 
     async listen(port: number | string) {
-        await this.app.listen(port)
+        this.server.listen(port)
         console.log('Server on port', port)
         console.log(`http://${process.env.DB_HOST || 'localhost'}:${port}/api`)
     }
