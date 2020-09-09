@@ -2,6 +2,8 @@ import { Request, Response } from 'express'
 import knex from '../database/connection'
 import bcrypt from 'bcrypt'
 
+import { sendMessage } from '../websocket'
+
 interface userI {
     id: Number,
     nome: String,
@@ -56,6 +58,8 @@ class UserController {
 
             await knex('usuario').insert(user)
 
+            sendMessage(null, 'new-insert', user)
+
             return res.status(201).json({ message: 'Cadastrado realizado com sucesso!' })
         } catch (error) {
             console.log('Erro:', error)
@@ -69,6 +73,9 @@ class UserController {
             const user = await knex('usuario').where('id', userId).update(req.body)
 
             if (!user) return res.status(400).json({ message: 'Usuário não existente na base de dados' })
+
+            const result = await knex('usuario').select('*').where('id', userId).first()
+            sendMessage(null, 'new-update', result)
 
             return res.json({ message: 'Dados atualizados com sucesso!' })
         } catch (error) {
