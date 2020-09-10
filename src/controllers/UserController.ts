@@ -58,7 +58,8 @@ class UserController {
 
             await knex('usuario').insert(user)
 
-            sendMessage(null, 'new-insert', user)
+            const result = await knex('usuario').select('*').where('email', user.email).first()
+            sendMessage(null, 'new-insert', result)
 
             return res.status(201).json({ message: 'Cadastrado realizado com sucesso!' })
         } catch (error) {
@@ -77,7 +78,7 @@ class UserController {
             const result = await knex('usuario').select('*').where('id', userId).first()
             sendMessage(null, 'new-update', result)
 
-            return res.json({ message: 'Dados atualizados com sucesso!' })
+            return res.json({ message: 'Dados atualizados com sucesso!', result })
         } catch (error) {
             console.log('Erro:', error)
             return res.json({ message: error })
