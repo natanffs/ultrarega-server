@@ -13,7 +13,7 @@ class AuthController {
 
             if (!user || !await bcrypt.compare(req.body.password, user.senha)) return res.status(400).json({ message: 'Usuário ou senha incorretos' })
 
-            //const permissions = await knex
+            //const permissions = await knexg
             //.raw('select permissoes.idPermissao, permissoes.descricao FROM permissoes join usuario_has_permissoes on usuario_has_permissoes.idPermissao = permissoes.idPermissao where usuario_has_permissoes.idUsuario = ' + user.id)
 
             user.senha = undefined
