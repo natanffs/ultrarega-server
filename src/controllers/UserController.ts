@@ -16,7 +16,7 @@ class UserController {
 
     async index(req: Request, res: Response) {
         try {
-            const users: userI[] = await knex('usuario').select('*')
+            const users = await knex('usuarios').select('*')
 
             users.map(u => {
                 u.senha = undefined
@@ -32,7 +32,7 @@ class UserController {
     async show(req: Request, res: Response) {
         try {
             const userId = req.params.id
-            const user = await knex('usuario').select('*').where('id', userId).first()
+            const user = await knex('usuarios').select('*').where('codigo_usuario', userId).first()
 
             if (!user) return res.status(400).json({ message: 'Usuário não existente na base de dados' })
 
@@ -49,16 +49,16 @@ class UserController {
         try {
             const user = req.body
 
-            const hasUser = await knex('usuario').select('email').where('email', user.email).first()
+            const hasUser = await knex('usuarios').select('email').where('email', user.email).first()
 
             if (hasUser) return res.status(400).json({ message: 'Email já existe na base de dados' })
 
             const hash = await bcrypt.hash(user.senha, 9)
             user.senha = hash
 
-            await knex('usuario').insert(user)
+            await knex('usuarios').insert(user)
 
-            const result = await knex('usuario').select('*').where('email', user.email).first()
+            const result = await knex('usuarios').select('*').where('email', user.email).first()
             sendMessage(null, 'new-insert', result)
 
             return res.status(201).json({ message: 'Cadastrado realizado com sucesso!' })
@@ -71,11 +71,17 @@ class UserController {
     async update(req: Request, res: Response) {
         try {
             const userId = req.params.id
-            const user = await knex('usuario').where('id', userId).update(req.body)
+            const userData = req.body
+            
+            if(userData.senha) {
+                const hash = await bcrypt.hash(userData.senha, 9)
+                userData.senha = hash
+            }
+            const user = await knex('usuarios').where('codigo_usuario', userId).update(userData)
 
             if (!user) return res.status(400).json({ message: 'Usuário não existente na base de dados' })
 
-            const result = await knex('usuario').select('*').where('id', userId).first()
+            const result = await knex('usuarios').select('*').where('codigo_usuario', userId).first()
             sendMessage(null, 'new-update', result)
 
             return res.json({ message: 'Dados atualizados com sucesso!', result })
@@ -88,7 +94,7 @@ class UserController {
     async delete(req: Request, res: Response) {
         try {
             const userId = req.params.id
-            const user = await knex('usuario').where('id', userId).del()
+            const user = await knex('usuarios').where('codigo_usuario', userId).del()
 
             if (!user) return res.status(400).json({ message: 'Usuário não existente na base de dados' })
 
