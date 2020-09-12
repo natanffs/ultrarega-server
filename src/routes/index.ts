@@ -8,6 +8,7 @@ import modelUtrRoute from './modelUtr.routes'
 import alertRoute from './alert.routes'
 import failRoute from './fail.routes'
 import criticalEventRoute from './criticalEvent.routes'
+import standartReportRoute from './standartReport.routes'
 
 export {
     indexRoute as index,
@@ -20,4 +21,5 @@ export {
     alertRoute as alert,
     failRoute as fail,
     criticalEventRoute as criticalEvent,
+    standartReportRoute as standartReport,
 }
