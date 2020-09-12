@@ -43,6 +43,7 @@ export class App {
         this.app.use('/api', routes.farm)
         this.app.use('/api', routes.utr)
         this.app.use('/api', routes.pivot)
+        this.app.use('/api', routes.modelUtr)
     }
 
     private routes() {
