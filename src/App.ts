@@ -40,6 +40,7 @@ export class App {
     private privateRoutes() {
         /** Admin routes  */
         this.app.use('/api', routes.user)
+        this.app.use('/api', routes.farm)
     }
 
     private routes() {
