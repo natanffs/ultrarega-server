@@ -44,6 +44,7 @@ export class App {
         this.app.use('/api', routes.utr)
         this.app.use('/api', routes.pivot)
         this.app.use('/api', routes.modelUtr)
+        this.app.use('/api', routes.alert)
     }
 
     private routes() {
