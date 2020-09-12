@@ -46,6 +46,7 @@ export class App {
         this.app.use('/api', routes.modelUtr)
         this.app.use('/api', routes.alert)
         this.app.use('/api', routes.fail)
+        this.app.use('/api', routes.criticalEvent)
     }
 
     private routes() {

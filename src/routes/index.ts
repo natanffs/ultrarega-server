@@ -7,6 +7,7 @@ import pivotRoute from './pivot.routes'
 import modelUtrRoute from './modelUtr.routes'
 import alertRoute from './alert.routes'
 import failRoute from './fail.routes'
+import criticalEventRoute from './criticalEvent.routes'
 
 export {
     indexRoute as index,
@@ -18,4 +19,5 @@ export {
     modelUtrRoute as modelUtr,
     alertRoute as alert,
     failRoute as fail,
+    criticalEventRoute as criticalEvent,
 }
