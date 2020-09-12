@@ -48,6 +48,7 @@ export class App {
         this.app.use('/api', routes.fail)
         this.app.use('/api', routes.criticalEvent)
         this.app.use('/api', routes.standartReport)
+        this.app.use('/api', routes.irrigationShift)
     }
 
     private routes() {
