@@ -26,19 +26,12 @@ class FarmHasUserController {
 
     async show(req: Request, res: Response) {
         try {
-            const farmHasUserId = req.params.id
-            const farmHasuserIdFarm = req.params.idFarm
-            const farmHasuserIdUser = req.params.idUser
-
-            console.log(farmHasUserId);
-            console.log(farmHasuserIdFarm);
-            console.log(farmHasuserIdUser);
-
+            const farmHasUserId = req.params.id            
             const farmHasUser = await knex('fazendas_has_usuarios').select('*').where('codigo_fazenda_usuario', farmHasUserId).first()
 
-            if (!farmHasUserId) return res.status(400).json({ message: 'Fazenda por usuário não existente na base de dados' })
+            if (!farmHasUser) return res.status(400).json({ message: 'Fazenda por usuário não existente na base de dados' })
 
-            //return res.json(farmHasUser)
+            return res.json(farmHasUser)
         } catch (error) {
             console.log('Erro:', error)
             return res.json({ message: error })
@@ -47,9 +40,9 @@ class FarmHasUserController {
 
     async store(req: Request, res: Response) {
         try {
-            const farm = req.body
+            const farmHasUser = req.body
 
-            await knex('fazendas').insert(farm)
+            await knex('fazendas_has_usuarios').insert(farmHasUser)
 
             return res.status(201).json({ message: 'Cadastrado realizado com sucesso!' })
         } catch (error) {
@@ -60,13 +53,13 @@ class FarmHasUserController {
 
     async update(req: Request, res: Response) {
         try {
-            const farmId = req.params.id
-            const farmData = req.body
+            const farmHasUserId = req.params.id
+            const farmHasUserData = req.body
             
             
-            const farm = await knex('fazendas').where('codigo_fazenda', farmId).update(farmData)
+            const farmHasUser = await knex('fazendas_has_usuarios').where('codigo_fazenda_usuario', farmHasUserId).update(farmHasUserData)
 
-            if (!farm) return res.status(400).json({ message: 'Fazenda não existente na base de dados' })
+            if (!farmHasUser) return res.status(400).json({ message: 'Fazenda não existente na base de dados' })
 
             return res.json({ message: 'Dados atualizados com sucesso!'})
             
@@ -78,12 +71,12 @@ class FarmHasUserController {
 
     async delete(req: Request, res: Response) {
         try {
-            const farmId = req.params.id
-            const farm = await knex('fazendas').where('codigo_fazenda', farmId).del()
+            const farmHasUserId = req.params.id
+            const farmHasUser = await knex('fazendas_has_usuarios').where('codigo_fazenda_usuario', farmHasUserId).del()
 
-            if (!farm) return res.status(400).json({ message: 'Fazenda não existente na base de dados' })
+            if (!farmHasUser) return res.status(400).json({ message: 'Fazenda por usuário não existente na base de dados' })
 
-            return res.json({ message: 'Fazenda removida com sucesso!' })
+            return res.json({ message: 'Associação de Fazenda e Usuário removida com sucesso!' })
         } catch (error) {
             console.log('Erro:', error)
             return res.json({ message: error })

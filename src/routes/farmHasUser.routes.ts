@@ -7,9 +7,8 @@ const farmHasUserController = new FarmHasUserController();
 router
     .get('/farmHasUsers/', farmHasUserController.index)
     .post('/farmHasUsers/', farmHasUserController.store)
-    //.get('/farmHasUsers/:id', farmHasUserController.show)
     .get('/farmHasUsers/:id', farmHasUserController.show)
     .put('/farmHasUsers/:id', farmHasUserController.update)
-    /*.delete('/farmHasUsers/:id', farmHasUserController.delete)*/
+    .delete('/farmHasUsers/:id', farmHasUserController.delete)
 
 export default router;
