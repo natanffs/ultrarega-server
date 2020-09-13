@@ -12,6 +12,7 @@ import failRoute from './fail.routes'
 import criticalEventRoute from './criticalEvent.routes'
 import standartReportRoute from './standartReport.routes'
 import irrigationShiftRoute from './irrigationShift.routes'
+import permissionRoute from './permission.routes'
 import pivotAltimetryRoute from './pivotAltimetry.routes'
 
 
@@ -28,6 +29,7 @@ export {
     criticalEventRoute as criticalEvent,
     standartReportRoute as standartReport,
     irrigationShiftRoute as irrigationShift,
+    permissionRoute as permission,
     farmHasUserRoute as farmHasUser,
     pivotAltimetryRoute as pivotAltimetry,
     farmHasUtrRoute as farmHasUtr,

@@ -51,6 +51,7 @@ export class App {
         this.app.use('/api', routes.criticalEvent)
         this.app.use('/api', routes.standartReport)
         this.app.use('/api', routes.irrigationShift)
+        this.app.use('/api', routes.permission)
         this.app.use('/api', routes.pivotAltimetry)
     }
 

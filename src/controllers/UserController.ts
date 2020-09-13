@@ -3,13 +3,14 @@ import knex from '../database/connection'
 import bcrypt from 'bcrypt'
 
 import { sendMessage } from '../websocket'
+import { permission } from 'src/routes'
 
 interface userI {
-    id: Number,
-    nome: String,
-    email: String,
-    senha: String,
-    permissoes: [Number]
+    id: number,
+    nome: string,
+    email: string,
+    senha: string,
+    permissoes?: [number]
 }
 
 class UserController {
@@ -71,20 +72,38 @@ class UserController {
     async update(req: Request, res: Response) {
         try {
             const userId = req.params.id
-            const userData = req.body
+            const userData: userI = req.body
             
             if(userData.senha) {
                 const hash = await bcrypt.hash(userData.senha, 9)
                 userData.senha = hash
             }
+
+            if(userData.permissoes && userData.permissoes.length > 0) {
+                try {
+                    userData.permissoes.forEach(async p => {
+                        let permissao = {
+                            codigo_usuario: Number(userId),
+                            codigo_permissao: Number(p)
+                        }
+                        console.log('codigooooooooooooooo', p)
+                        await knex('usuarios_has_permissoes').insert(permissao)
+                        // await knex.raw(`INSERT INTO usuarios_has_permissoes (codigo_usuario, codigo_permissao) VALUES (${userId}, ${p}`)
+                    })
+                } catch (error) {
+                    console.log('Erro ao inserir permissões:', error)
+                }
+                userData.permissoes = undefined
+            }
+
             const user = await knex('usuarios').where('codigo_usuario', userId).update(userData)
 
             if (!user) return res.status(400).json({ message: 'Usuário não existente na base de dados' })
 
-            const result = await knex('usuarios').select('*').where('codigo_usuario', userId).first()
-            sendMessage(null, 'new-update', result)
+            // const result = await knex('usuarios').select('*').where('codigo_usuario', userId).first()
+            // sendMessage(null, 'new-update', result)
 
-            return res.json({ message: 'Dados atualizados com sucesso!', result })
+            return res.json({ message: 'Dados atualizados com sucesso!' })
         } catch (error) {
             console.log('Erro:', error)
             return res.json({ message: error })
