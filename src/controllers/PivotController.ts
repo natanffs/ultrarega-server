@@ -64,7 +64,7 @@ class PivotController {
 
             if (!pivot) return res.status(400).json({ message: 'Usuário não existente na base de dados' })
 
-            return res.json({ message: 'Usuário removido com sucesso!' })
+            return res.json({ message: 'Pivô removido com sucesso!' })
         } catch (error) {
             console.log(error)
             return res.json({ message: error })

@@ -10,6 +10,7 @@ import failRoute from './fail.routes'
 import criticalEventRoute from './criticalEvent.routes'
 import standartReportRoute from './standartReport.routes'
 import irrigationShiftRoute from './irrigationShift.routes'
+import permissionRoute from './permission.routes'
 
 export {
     indexRoute as index,
@@ -24,4 +25,5 @@ export {
     criticalEventRoute as criticalEvent,
     standartReportRoute as standartReport,
     irrigationShiftRoute as irrigationShift,
+    permissionRoute as permission,
 }
