@@ -41,6 +41,7 @@ export class App {
         /** Admin routes  */
         this.app.use('/api', routes.user)
         this.app.use('/api', routes.farm)
+        this.app.use('/api', routes.farmHasUser)
         this.app.use('/api', routes.utr)
         this.app.use('/api', routes.pivot)
         this.app.use('/api', routes.modelUtr)

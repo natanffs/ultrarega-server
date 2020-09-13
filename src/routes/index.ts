@@ -2,6 +2,7 @@ import indexRoute from './index.routes'
 import authRoute from './auth.routes'
 import userRoute from './user.routes'
 import farmRoute from './farm.routes'
+import farmHasUserRoute from './farmHasUser.routes'
 import utrRoute from './utr.routes'
 import pivotRoute from './pivot.routes'
 import modelUtrRoute from './modelUtr.routes'
@@ -24,4 +25,5 @@ export {
     criticalEventRoute as criticalEvent,
     standartReportRoute as standartReport,
     irrigationShiftRoute as irrigationShift,
+    farmHasUserRoute as farmHasUser
 }
