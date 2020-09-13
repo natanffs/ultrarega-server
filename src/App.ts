@@ -42,6 +42,7 @@ export class App {
         this.app.use('/api', routes.user)
         this.app.use('/api', routes.farm)
         this.app.use('/api', routes.farmHasUser)
+        this.app.use('/api', routes.farmHasUtr)
         this.app.use('/api', routes.utr)
         this.app.use('/api', routes.pivot)
         this.app.use('/api', routes.modelUtr)

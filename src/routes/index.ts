@@ -3,6 +3,7 @@ import authRoute from './auth.routes'
 import userRoute from './user.routes'
 import farmRoute from './farm.routes'
 import farmHasUserRoute from './farmHasUser.routes'
+import farmHasUtrRoute from './farmHasUtr.routes'
 import utrRoute from './utr.routes'
 import pivotRoute from './pivot.routes'
 import modelUtrRoute from './modelUtr.routes'
@@ -12,6 +13,7 @@ import criticalEventRoute from './criticalEvent.routes'
 import standartReportRoute from './standartReport.routes'
 import irrigationShiftRoute from './irrigationShift.routes'
 import pivotAltimetryRoute from './pivotAltimetry.routes'
+
 
 export {
     indexRoute as index,
@@ -28,4 +30,6 @@ export {
     irrigationShiftRoute as irrigationShift,
     farmHasUserRoute as farmHasUser,
     pivotAltimetryRoute as pivotAltimetry,
+    farmHasUtrRoute as farmHasUtr,
+    
 }
