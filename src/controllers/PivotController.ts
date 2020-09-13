@@ -6,7 +6,7 @@ class PivotController {
         try {
             //Listar todas as Pivots cadastradas
             //Listar todas as Pivots de um usuário
-            const pivots = await knex('pivos').select('*')
+            const pivots = await knex('pivos').join('fazendas', 'fazendas.codigo_fazenda', 'pivos.codigo_fazenda').select('pivos.*', 'fazendas.nome_fazenda')
 
             return res.json(pivots)
         } catch (error) {
@@ -18,7 +18,7 @@ class PivotController {
     async show(req: Request, res: Response) {
         try {
             const cod_pivot = req.params.id
-            const pivot = await knex('pivos').select('*').where('codigo_pivo', cod_pivot).first()
+            const pivot = await knex('pivos').join('fazendas', 'fazendas.codigo_fazenda', 'pivos.codigo_fazenda').select('pivos.*', 'fazendas.nome_fazenda').where('codigo_pivo', cod_pivot).first()
 
             if (!pivot) return res.status(400).json({ message: 'Pivô não existente na base de dados' })
 

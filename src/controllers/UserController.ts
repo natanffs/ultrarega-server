@@ -47,7 +47,7 @@ class UserController {
 
     async store(req: Request, res: Response) {
         try {
-            const user = req.body
+            const user: userI = req.body
 
             const hasUser = await knex('usuarios').select('email').where('email', user.email).first()
 
