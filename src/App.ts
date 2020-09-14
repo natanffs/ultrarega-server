@@ -55,6 +55,7 @@ export class App {
         this.app.use('/api', routes.pivotAltimetry)
         this.app.use('/api', routes.externalUser)
         this.app.use('/api', routes.comandUtr)
+        this.app.use('/api', routes.configUtr)
     }
 
     private routes() {

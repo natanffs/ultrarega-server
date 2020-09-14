@@ -16,6 +16,7 @@ import permissionRoute from './permission.routes'
 import pivotAltimetryRoute from './pivotAltimetry.routes'
 import externalUserRoute from './externalUser.routes'
 import comandUtrRoute from './comandUtr.routes'
+import configUtrRoute from './configUtr.routes'
 
 
 export {
@@ -37,5 +38,6 @@ export {
     farmHasUtrRoute as farmHasUtr,
     externalUserRoute as externalUser,
     comandUtrRoute as comandUtr,
+    configUtrRoute as configUtr,
         
 }
