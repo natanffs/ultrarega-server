@@ -53,6 +53,7 @@ export class App {
         this.app.use('/api', routes.irrigationShift)
         this.app.use('/api', routes.permission)
         this.app.use('/api', routes.pivotAltimetry)
+        this.app.use('/api', routes.externalUser)
     }
 
     private routes() {
