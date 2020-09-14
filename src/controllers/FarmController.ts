@@ -44,6 +44,23 @@ class FarmController {
         try {
             const farm = req.body
 
+            // if(farm.codigo_usuarios && farm.codigo_usuarios.length > 0) {
+            //     try {
+            //         farm.codigo_usuarios.forEach(async usrs => {
+            //             let permissao = {
+            //                 codigo_fazenda: Number(p)
+            //                 codigo_usuario: Number(userId),
+            //             }
+            //             console.log('codigooooooooooooooo', p)
+            //             await knex('usuarios_has_permissoes').insert(permissao)
+            //             // await knex.raw(`INSERT INTO usuarios_has_permissoes (codigo_usuario, codigo_permissao) VALUES (${userId}, ${p}`)
+            //         })
+            //     } catch (error) {
+            //         console.log('Erro ao inserir permissões:', error)
+            //     }
+            //     userData.permissoes = undefined
+            // }
+
             await knex('fazendas').insert(farm)
 
             return res.status(201).json({ message: 'Cadastrado realizado com sucesso!' })
@@ -56,8 +73,24 @@ class FarmController {
     async update(req: Request, res: Response) {
         try {
             const farmId = req.params.id
-            const farmData = req.body
-            
+            let farmData = req.body
+
+            if(farmData.codigo_usuarios) {
+                try {
+                    farmData.codigo_usuarios.forEach(async usr => {
+                        let rel = {
+                            codigo_fazenda: Number(farmId),
+                            codigo_usuario: Number(usr),
+                        }
+
+                        await knex('fazendas_has_usuarios').insert(rel)
+                        // await knex.raw(`INSERT INTO usuarios_has_permissoes (codigo_usuario, codigo_permissao) VALUES (${userId}, ${p}`)
+                    })
+                } catch (error) {
+                    console.log('Erro ao inserir relacionamento:', error)
+                }
+                farmData.codigo_usuarios = undefined
+            }
             
             const farm = await knex('fazendas').where('codigo_fazenda', farmId).update(farmData)
 

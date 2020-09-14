@@ -5,6 +5,7 @@ import farmRoute from './farm.routes'
 import farmHasUserRoute from './farmHasUser.routes'
 import farmHasUtrRoute from './farmHasUtr.routes'
 import utrRoute from './utr.routes'
+import utrMinuteRoute from './utrMinute.routes'
 import pivotRoute from './pivot.routes'
 import modelUtrRoute from './modelUtr.routes'
 import alertRoute from './alert.routes'
@@ -22,6 +23,7 @@ export {
     userRoute as user,
     farmRoute as farm,
     utrRoute as utr,
+    utrMinuteRoute as utrMinute,
     pivotRoute as pivot,
     modelUtrRoute as modelUtr,
     alertRoute as alert,
