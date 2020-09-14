@@ -6,7 +6,12 @@ class UtrController {
         try {
             //Listar todas as utrs cadastradas
             //Listar todas as utrs de um usuário
-            const utrs = await knex('utrs').select('*')
+            //const utrs = await knex('utrs').select('*')
+
+            const utrs = await knex('utrs')
+                                .join('pivos', 'pivos.codigo_pivo', 'utrs.codigo_pivo')
+                                .join('fazendas', 'fazendas.codigo_fazenda', 'pivos.codigo_fazenda')
+                                .select('utrs.*', 'fazendas.nome_fazenda');
 
             return res.json(utrs)
         } catch (error) {
@@ -18,7 +23,11 @@ class UtrController {
     async show(req: Request, res: Response) {
         try {
             const cod_utr = req.params.id
-            const utr = await knex('utrs').select('*').where('codigo_utr', cod_utr).first()
+        
+            const utr = await knex('utrs')
+                                .join('pivos', 'pivos.codigo_pivo', 'utrs.codigo_pivo')
+                                .join('fazendas', 'fazendas.codigo_fazenda', 'pivos.codigo_fazenda')
+                                .select('utrs.*', 'fazendas.nome_fazenda').where('codigo_utr', cod_utr).first()
 
             if (!utr) return res.status(400).json({ message: 'UTR não existente na base de dados' })
 
@@ -42,7 +51,15 @@ class UtrController {
 
             const result = await knex('utrs').insert(utr)
 
-            if(result) {
+            /*if(result) {
+                const createUtrNow = await knex.schema.createTable(name, table => {
+                    table.increments();
+                    table.string('name');
+                    table.timestamps();
+                  })
+
+                  return res.json({ message: 'Ok - sucesso!' })
+                  return res.json({ createUtrNow})
                 //após a inserção der certo, temos que fazer um create table com o nome_utr_now
                 //e todas as linhas que acabaram de ser cadastradas aqui
                 //viram colunas na utr_now
@@ -53,7 +70,7 @@ class UtrController {
                 //3 - se a criação der certo, realizar um insert com todos os campos nulos, ou default
                 //essa linha será uma só para sempre, ou seja, o aparelho sempre fará um update desses valores
                 //utilizando o id 1 dessa tabela utr_now_n
-            }
+            }*/
 
             return res.status(201).json({ message: 'Cadastrado realizado com sucesso!' })
         } catch (error) {
