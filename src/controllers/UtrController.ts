@@ -40,12 +40,20 @@ class UtrController {
             let name = `UTR_NOW_${last_codigo_utr + 1}`
             utr.nome_utr_now = name
 
-            //const result = await knex('utrs').insert(utr)
+            const result = await knex('utrs').insert(utr)
 
-            //if(result) {
-                const fields = await knex('modelo_utr').select('*')
-                
-            //}
+            if(result) {
+                //após a inserção der certo, temos que fazer um create table com o nome_utr_now
+                //e todas as linhas que acabaram de ser cadastradas aqui
+                //viram colunas na utr_now
+                //1 - fazer uma consulta no banco pra trazer a utr que acabou de ser inserida aqui,
+                //eu acho que o knex não retorna o objeto recem inserido, ele retorna um valor se deu certo ou não
+                //2 - pegar cada campo do retorno dessa utr recem inserida e criar como coluna no CREATE TABLE que vamos
+                //fazer aqui dentro desse método
+                //3 - se a criação der certo, realizar um insert com todos os campos nulos, ou default
+                //essa linha será uma só para sempre, ou seja, o aparelho sempre fará um update desses valores
+                //utilizando o id 1 dessa tabela utr_now_n
+            }
 
             return res.status(201).json({ message: 'Cadastrado realizado com sucesso!' })
         } catch (error) {
