@@ -15,6 +15,7 @@ import irrigationShiftRoute from './irrigationShift.routes'
 import permissionRoute from './permission.routes'
 import pivotAltimetryRoute from './pivotAltimetry.routes'
 import externalUserRoute from './externalUser.routes'
+import comandUtrRoute from './comandUtr.routes'
 
 
 export {
@@ -35,5 +36,6 @@ export {
     pivotAltimetryRoute as pivotAltimetry,
     farmHasUtrRoute as farmHasUtr,
     externalUserRoute as externalUser,
+    comandUtrRoute as comandUtr,
         
 }
