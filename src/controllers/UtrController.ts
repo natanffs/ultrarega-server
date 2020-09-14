@@ -49,9 +49,37 @@ class UtrController {
             let name = `UTR_NOW_${last_codigo_utr + 1}`
             utr.nome_utr_now = name
 
-            const result = await knex('utrs').insert(utr)
+            //const result = await knex('utrs').insert(utr)
+            const result = 1
 
-            /*if(result) {
+            if(result ==1) {
+                const dadosModelUtr = req.body.codigo_itens;
+
+                const arrayItens = `${Object.values(dadosModelUtr)}`;
+                
+
+                let vetItens = JSON.stringify(arrayItens.split(','))
+
+                let insert_string = ''
+                
+                
+                for(let i=0; i < vetItens.length; i++){
+                    const infoModelUtr = await knex('modelo_utr')
+                    .select('nome', 'tipo')
+                    .where('codigo_item',vetItens[i])
+                    insert_string += `${infoModelUtr},`
+                }
+
+                
+        
+                
+                
+                return res.json({dadosModelUtr})
+
+                
+                
+
+                /*
                 const createUtrNow = await knex.schema.createTable(name, table => {
                     table.increments();
                     table.string('name');
@@ -60,6 +88,8 @@ class UtrController {
 
                   return res.json({ message: 'Ok - sucesso!' })
                   return res.json({ createUtrNow})
+                  
+                  */
                 //após a inserção der certo, temos que fazer um create table com o nome_utr_now
                 //e todas as linhas que acabaram de ser cadastradas aqui
                 //viram colunas na utr_now
@@ -70,7 +100,7 @@ class UtrController {
                 //3 - se a criação der certo, realizar um insert com todos os campos nulos, ou default
                 //essa linha será uma só para sempre, ou seja, o aparelho sempre fará um update desses valores
                 //utilizando o id 1 dessa tabela utr_now_n
-            }*/
+            }
 
             return res.status(201).json({ message: 'Cadastrado realizado com sucesso!' })
         } catch (error) {
