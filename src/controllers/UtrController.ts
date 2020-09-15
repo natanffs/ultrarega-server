@@ -56,25 +56,24 @@ class UtrController {
                 const dadosModelUtr = req.body.codigo_itens;
 
                 const arrayItens = `${Object.values(dadosModelUtr)}`;
-                
-
-                let vetItens = JSON.stringify(arrayItens.split(','))
+            
+                let vetItens = arrayItens.split(',')
 
                 let insert_string = ''
-                
-                
+
+
                 for(let i=0; i < vetItens.length; i++){
                     const infoModelUtr = await knex('modelo_utr')
                     .select('nome', 'tipo')
                     .where('codigo_item',vetItens[i])
-                    insert_string += `${infoModelUtr},`
-                }
+                    
+                    insert_string += `${JSON.stringify(infoModelUtr)},`
+                    insert_string = string.replace(, 
+                }  
+
 
                 
-        
-                
-                
-                return res.json({dadosModelUtr})
+                return res.json({dadosModelUtr,insert_string, arrayItens, vetItens})
 
                 
                 
