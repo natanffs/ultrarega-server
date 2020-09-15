@@ -5,10 +5,10 @@ import bcrypt from 'bcrypt'
 import { sendMessage } from '../websocket'
 
 interface configUtrI {
-    codigo_utr_now_configuracao: Number,
-    codigo_item: Number,
-    codigo_utr: Number,
-    usa_minuto: Number,
+    codigo_utr_now_configuracao: number,
+    codigo_item: number,
+    codigo_utr: number,
+    usa_minuto: number,
    
 }
 

@@ -5,8 +5,8 @@ import bcrypt from 'bcrypt'
 import { sendMessage } from '../websocket'
 
 interface comandUtrI {
-    codigo_utr_comandos: Number,
-    codigo_utr: Number,
+    codigo_utr_comandos: number,
+    codigo_utr: number,
     data_hora: Date,
     comando_sentido: String,
     comando_booster: String,

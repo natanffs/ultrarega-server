@@ -15,7 +15,6 @@ class RoutineController {
         
         utrsCodes.map(async uc => {
             const utr_minute_data = await knex('utr_minutos_' + uc.codigo_utr).select('*').where('codigo_utr', uc.codigo_utr).orderBy('codigo_utr_minutos', "desc").first()
-            console.log('aaaaaaaaaa', uc.codigo_utr)
             sendMessage(null, `utr-update-${uc.codigo_utr}`, utr_minute_data)
         })
     }

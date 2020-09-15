@@ -9,9 +9,9 @@ class UtrController {
             //const utrs = await knex('utrs').select('*')
 
             const utrs = await knex('utrs')
-                                .join('pivos', 'pivos.codigo_pivo', 'utrs.codigo_pivo')
-                                .join('fazendas', 'fazendas.codigo_fazenda', 'pivos.codigo_fazenda')
-                                .select('utrs.*', 'fazendas.nome_fazenda');
+                .join('pivos', 'pivos.codigo_pivo', 'utrs.codigo_pivo')
+                .join('fazendas', 'fazendas.codigo_fazenda', 'pivos.codigo_fazenda')
+                .select('utrs.*', 'fazendas.nome_fazenda');
 
             return res.json(utrs)
         } catch (error) {
@@ -23,11 +23,11 @@ class UtrController {
     async show(req: Request, res: Response) {
         try {
             const cod_utr = req.params.id
-        
+
             const utr = await knex('utrs')
-                                .join('pivos', 'pivos.codigo_pivo', 'utrs.codigo_pivo')
-                                .join('fazendas', 'fazendas.codigo_fazenda', 'pivos.codigo_fazenda')
-                                .select('utrs.*', 'fazendas.nome_fazenda').where('codigo_utr', cod_utr).first()
+                .join('pivos', 'pivos.codigo_pivo', 'utrs.codigo_pivo')
+                .join('fazendas', 'fazendas.codigo_fazenda', 'pivos.codigo_fazenda')
+                .select('utrs.*', 'fazendas.nome_fazenda').where('codigo_utr', cod_utr).first()
 
             if (!utr) return res.status(400).json({ message: 'UTR não existente na base de dados' })
 
@@ -40,66 +40,46 @@ class UtrController {
 
     async store(req: Request, res: Response) {
         try {
-            const utr = req.body
+            const { descricao, codigo_pivo } = req.body
+
             let last_codigo_utr = 0
             const lastUtr = await knex('utrs').select('codigo_utr').orderBy('codigo_utr', 'desc').first()
+
+            last_codigo_utr = lastUtr ? lastUtr.codigo_utr : 0
+
+            let now = `utr_now_${last_codigo_utr + 1}`
+            let minutos = `utr_minutos_${last_codigo_utr + 1}`
             
-            last_codigo_utr = lastUtr ? lastUtr.codigo_utr : 0 
+            const utr = {
+                nome_utr_now: now,
+                descricao,
+                codigo_pivo
+            }
 
-            let name = `UTR_NOW_${last_codigo_utr + 1}`
-            utr.nome_utr_now = name
+            const result = await knex('utrs').insert(utr, 'codigo_utr')
 
-            //const result = await knex('utrs').insert(utr)
-            const result = 1
+            if (result) {
 
-            if(result ==1) {
-                const dadosModelUtr = req.body.codigo_itens;
+                //const id = knex('utrs').select('codigo_utr').where('codigo_pivo', codigo_pivo).where('descricao', descricao).orderBy('codigo_utr', 'desc')
 
-                const arrayItens = `${Object.values(dadosModelUtr)}`;
-                
+                const utr_now_fields_ids: number[] = req.body.codigo_itens
+                let create_string = ` ( codigo_utr_now INT NOT NULL AUTO_INCREMENT PRIMARY KEY, codigo_utr INT, `
 
-                let vetItens = JSON.stringify(arrayItens.split(','))
-
-                let insert_string = ''
-                
-                
-                for(let i=0; i < vetItens.length; i++){
-                    const infoModelUtr = await knex('modelo_utr')
-                    .select('nome', 'tipo')
-                    .where('codigo_item',vetItens[i])
-                    insert_string += `${infoModelUtr},`
+                for (var i = 0; i < utr_now_fields_ids.length; i++) {
+                    const result = await knex('modelo_utr').select('nome', 'tipo').where('codigo_item', utr_now_fields_ids[i]).first()
+                    
+                    if (result) {
+                        create_string += `${result.nome} ${result.tipo}, `
+                    }    
                 }
 
-                
-        
-                
-                
-                return res.json({dadosModelUtr})
+                create_string = create_string.substring(0, create_string.length - 2)
+                create_string += ' )'
 
+                await knex.raw(`CREATE TABLE ${now} ${create_string}`)
                 
-                
-
-                /*
-                const createUtrNow = await knex.schema.createTable(name, table => {
-                    table.increments();
-                    table.string('name');
-                    table.timestamps();
-                  })
-
-                  return res.json({ message: 'Ok - sucesso!' })
-                  return res.json({ createUtrNow})
-                  
-                  */
-                //após a inserção der certo, temos que fazer um create table com o nome_utr_now
-                //e todas as linhas que acabaram de ser cadastradas aqui
-                //viram colunas na utr_now
-                //1 - fazer uma consulta no banco pra trazer a utr que acabou de ser inserida aqui,
-                //eu acho que o knex não retorna o objeto recem inserido, ele retorna um valor se deu certo ou não
-                //2 - pegar cada campo do retorno dessa utr recem inserida e criar como coluna no CREATE TABLE que vamos
-                //fazer aqui dentro desse método
-                //3 - se a criação der certo, realizar um insert com todos os campos nulos, ou default
-                //essa linha será uma só para sempre, ou seja, o aparelho sempre fará um update desses valores
-                //utilizando o id 1 dessa tabela utr_now_n
+                await knex(`${now}`).insert({ codigo_utr: result })
+                await knex.raw(`CREATE TABLE ${minutos} ${create_string}`)
             }
 
             return res.status(201).json({ message: 'Cadastrado realizado com sucesso!' })

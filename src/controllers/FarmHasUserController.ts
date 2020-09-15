@@ -6,9 +6,9 @@ import { sendMessage } from '../websocket'
 import { alert } from 'src/routes'
 
 interface farmHasUserI {
-    codigo_fazenda_usuario: Number,
-    codigo_fazenda: Number,
-    codigo_usuario: Number
+    codigo_fazenda_usuario: number,
+    codigo_fazenda: number,
+    codigo_usuario: number
 
 }
 

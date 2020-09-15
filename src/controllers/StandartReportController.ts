@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt'
 import { sendMessage } from '../websocket'
 
 interface standartReportI {
-    codigo_padroes_relatorio: Number,
+    codigo_padroes_relatorio: number,
     nome: String,
     prioridade: String,
     ordem: String,
