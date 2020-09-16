@@ -5,9 +5,9 @@ import bcrypt from 'bcrypt'
 import { sendMessage } from '../websocket'
 
 interface externalUserI {
-    codigo_usuario_externo: Number,
-    codigo_usuario: Number,
-    codigo_pivo: Number,
+    codigo_usuario_externo: number,
+    codigo_usuario: number,
+    codigo_pivo: number,
     data_inicial: Date,
     data_final: Date
 

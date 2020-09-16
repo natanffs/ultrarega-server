@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt'
 import { sendMessage } from '../websocket'
 
 interface failI {
-    codigo_falha: Number,
+    codigo_falha: number,
     descricao: String,
 }
 

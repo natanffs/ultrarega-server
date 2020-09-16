@@ -2,14 +2,14 @@ import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 
 interface Idecoded {
-    id: Number,
+    id: number,
     permissions: []
 }
 
 declare global {
     namespace Express {
         interface Request {
-            userId: Number,
+            userId: number,
             userPermissions: []
         }
     }

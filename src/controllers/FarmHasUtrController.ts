@@ -6,9 +6,9 @@ import { sendMessage } from '../websocket'
 import { alert } from 'src/routes'
 
 interface farmHasUtrI {
-    codigo_utr_fazenda: Number,
-    codigo_fazenda: Number,
-    codigo_utr: Number
+    codigo_utr_fazenda: number,
+    codigo_fazenda: number,
+    codigo_utr: number
 
 }
 

@@ -5,9 +5,9 @@ import bcrypt from 'bcrypt'
 import { sendMessage } from '../websocket'
 
 interface irrigationShiftI {
-    codigo_turnos_rega: Number,
+    codigo_turnos_rega: number,
     ligar: String,
-    percetimetro: Number,
+    percetimetro: number,
     situacao: String,
     inicio: String,
     termino: String,

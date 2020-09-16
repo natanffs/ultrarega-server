@@ -5,12 +5,12 @@ import bcrypt from 'bcrypt'
 import { sendMessage } from '../websocket'
 
 interface pivotAltimetryI {
-    codigo_altimetria: Number,
-    angulo: Number,
-    altura : Number,
-    latitude: Number,
-    longitude: Number,
-    codigo_pivot: Number
+    codigo_altimetria: number,
+    angulo: number,
+    altura : number,
+    latitude: number,
+    longitude: number,
+    codigo_pivot: number
 }
 
 class PivotAltimetryController {

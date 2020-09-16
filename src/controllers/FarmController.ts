@@ -5,12 +5,12 @@ import bcrypt from 'bcrypt'
 import { sendMessage } from '../websocket'
 
 interface farmI {
-    codigo_fazenda: Number,
+    codigo_fazenda: number,
     nome_fazenda: String,
     cnpj: String,
     inscricao_produtor: String,
-    latitude: Number,
-    longitude: Number,
+    latitude: number,
+    longitude: number,
 
 }
 

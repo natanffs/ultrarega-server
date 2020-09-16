@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt'
 import { sendMessage } from '../websocket'
 
 interface criticalEventI {
-    codigo_evento: Number,
+    codigo_evento: number,
     descricao: String,
     data_evento: Date,
 }

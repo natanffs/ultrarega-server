@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt'
 import { sendMessage } from '../websocket'
 
 interface alertI {
-    codigo_alerta: Number,
+    codigo_alerta: number,
     nome: String,
     situacao_alerta: String,
 }

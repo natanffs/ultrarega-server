@@ -5,12 +5,12 @@ import bcrypt from 'bcrypt'
 import { sendMessage } from '../websocket'
 
 interface modelUtrI {
-    codigo_modelo_utr: Number,
-    nome: String,
-    tipo: String,
-    visivel: String,
-    fator_multiplicador: Number,
-    unidade_medida: Number,
+    codigo_modelo_utr: number,
+    nome: string,
+    tipo: string,
+    visivel: string,
+    fator_multiplicador: number,
+    unidade_medida: number,
 
 }
 
@@ -29,7 +29,7 @@ class ModelUtrController {
     async show(req: Request, res: Response) {
         try {
             const modelUtrId = req.params.id
-            const farm = await knex('modelo_utr').select('*').where('codigo_modelo_utr', modelUtrId).first()
+            const farm = await knex('modelo_utr').select('*').where('codigo_item', modelUtrId).first()
 
             return res.json(farm)
         } catch (error) {
@@ -57,7 +57,7 @@ class ModelUtrController {
             const modeUtrData = req.body
             
             
-            const farm = await knex('modelo_utr').where('codigo_modelo_utr', modeUtrId).update(modeUtrData)
+            const farm = await knex('modelo_utr').where('codigo_item', modeUtrId).update(modeUtrData)
 
             if (!farm) return res.status(400).json({ message: 'Modelo UTR não existente na base de dados' })
 
@@ -72,7 +72,7 @@ class ModelUtrController {
     async delete(req: Request, res: Response) {
         try {
             const modeUtrId = req.params.id
-            const modelUtr = await knex('modelo_utr').where('codigo_modelo_utr', modeUtrId).del()
+            const modelUtr = await knex('modelo_utr').where('codigo_item', modeUtrId).del()
 
             if (!modelUtr) return res.status(400).json({ message: 'Modelo UTR não existente na base de dados' })
 
