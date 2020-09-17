@@ -23,11 +23,17 @@ class UtrController {
     async show(req: Request, res: Response) {
         try {
             const cod_utr = req.params.id
-
+            const calculados = `utr_now_calculados_${cod_utr}`
             const utr = await knex('utrs')
                 .join('pivos', 'pivos.codigo_pivo', 'utrs.codigo_pivo')
                 .join('fazendas', 'fazendas.codigo_fazenda', 'pivos.codigo_fazenda')
-                .select('utrs.*', 'fazendas.nome_fazenda').where('codigo_utr', cod_utr).first()
+                .join(calculados, `${calculados}.codigo_utr`, 'utrs.codigo_utr')
+                .select(
+                    'utrs.*',
+                    'fazendas.nome_fazenda',
+                    'pivos.nome',
+                    `${calculados}.codigo_utr`
+                ).where('codigo_utr', cod_utr).first()
 
             if (!utr) return res.status(400).json({ message: 'UTR não existente na base de dados' })
 
@@ -49,7 +55,7 @@ class UtrController {
 
             let now = `utr_now_${last_codigo_utr + 1}`
             let minutos = `utr_minutos_${last_codigo_utr + 1}`
-            
+
             const utr = {
                 nome_utr_now: now,
                 descricao,
@@ -67,17 +73,17 @@ class UtrController {
 
                 for (var i = 0; i < utr_now_fields_ids.length; i++) {
                     const result = await knex('modelo_utr').select('nome', 'tipo').where('codigo_item', utr_now_fields_ids[i]).first()
-                    
+
                     if (result) {
                         create_string += `${result.nome} ${result.tipo}, `
-                    }    
+                    }
                 }
 
                 create_string = create_string.substring(0, create_string.length - 2)
                 create_string += ' )'
 
                 await knex.raw(`CREATE TABLE ${now} ${create_string}`)
-                
+
                 await knex(`${now}`).insert({ codigo_utr: result })
                 await knex.raw(`CREATE TABLE ${minutos} ${create_string}`)
             }
