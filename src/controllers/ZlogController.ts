@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import knex from '../database/connection'
 
-class UtrController {
+class ZlogController {
     async index(req: Request, res: Response) {
         try {
             //Listar todas as utrs cadastradas
@@ -40,69 +40,10 @@ class UtrController {
 
     async store(req: Request, res: Response) {
         try {
-            const { descricao, codigo_pivo } = req.body
+            const log = req.body
 
-            let last_codigo_utr = 0
-            const lastUtr = await knex('utrs').select('codigo_utr').orderBy('codigo_utr', 'desc').first()
-
-            last_codigo_utr = lastUtr ? lastUtr.codigo_utr : 0
-
-            let now = `utr_now_${last_codigo_utr + 1}`
-            let minutos = `utr_minutos_${last_codigo_utr + 1}`
-            
-            const utr = {
-                nome_utr_now: now,
-                descricao,
-                codigo_pivo
-            }
-
-            const result = await knex('utrs').insert(utr, 'codigo_utr')
-
-<<<<<<< HEAD
-                const arrayItens = `${Object.values(dadosModelUtr)}`;
-            
-                let vetItens = arrayItens.split(',')
-
-                let insert_string = ''
-
-
-                for(let i=0; i < vetItens.length; i++){
-                    const infoModelUtr = await knex('modelo_utr')
-                    .select('nome', 'tipo')
-                    .where('codigo_item',vetItens[i])
-                    
-                    insert_string += `${JSON.stringify(infoModelUtr)},`
-                    insert_string = string.replace(, 
-                }  
-
-
-                
-                return res.json({dadosModelUtr,insert_string, arrayItens, vetItens})
-=======
-            if (result) {
-
-                //const id = knex('utrs').select('codigo_utr').where('codigo_pivo', codigo_pivo).where('descricao', descricao).orderBy('codigo_utr', 'desc')
-
-                const utr_now_fields_ids: number[] = req.body.codigo_itens
-                let create_string = ` ( codigo_utr_now INT NOT NULL AUTO_INCREMENT PRIMARY KEY, codigo_utr INT, `
-
-                for (var i = 0; i < utr_now_fields_ids.length; i++) {
-                    const result = await knex('modelo_utr').select('nome', 'tipo').where('codigo_item', utr_now_fields_ids[i]).first()
-                    
-                    if (result) {
-                        create_string += `${result.nome} ${result.tipo}, `
-                    }    
-                }
-
-                create_string = create_string.substring(0, create_string.length - 2)
-                create_string += ' )'
->>>>>>> 44382a1eda7c1785f65fc5ff771ed7d2a3045ca2
-
-                await knex.raw(`CREATE TABLE ${now} ${create_string}`)
-                
-                await knex(`${now}`).insert({ codigo_utr: result })
-                await knex.raw(`CREATE TABLE ${minutos} ${create_string}`)
-            }
+        
+            await knex('ZLOG').insert(log, 'codigo_utr')
 
             return res.status(201).json({ message: 'Cadastrado realizado com sucesso!' })
         } catch (error) {
@@ -141,4 +82,4 @@ class UtrController {
     }
 }
 
-export default UtrController
+export default ZlogController

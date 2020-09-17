@@ -37,11 +37,16 @@ class FailController {
 
     async store(req: Request, res: Response) {
         try {
-            const fail = req.body
+            const {descricao} = req.body
+            const dadosLog = req.body.dadosLog
 
-            await knex('falhas').insert(fail)
+            const fail = descricao;
+           
+            /*await knex('falhas').insert(fail)
+            await knex('zlog').insert(dadosLog)
 
-            return res.status(201).json({ message: 'Cadastrado realizado com sucesso!' })
+            return res.status(201).json({ message: 'Cadastrado realizado com sucesso!' })*/
+            return res.json({ message: dadosLog })
         } catch (error) {
             console.log('Erro:', error)
             return res.json({ message: error })

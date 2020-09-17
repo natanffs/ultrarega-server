@@ -58,27 +58,6 @@ class UtrController {
 
             const result = await knex('utrs').insert(utr, 'codigo_utr')
 
-<<<<<<< HEAD
-                const arrayItens = `${Object.values(dadosModelUtr)}`;
-            
-                let vetItens = arrayItens.split(',')
-
-                let insert_string = ''
-
-
-                for(let i=0; i < vetItens.length; i++){
-                    const infoModelUtr = await knex('modelo_utr')
-                    .select('nome', 'tipo')
-                    .where('codigo_item',vetItens[i])
-                    
-                    insert_string += `${JSON.stringify(infoModelUtr)},`
-                    insert_string = string.replace(, 
-                }  
-
-
-                
-                return res.json({dadosModelUtr,insert_string, arrayItens, vetItens})
-=======
             if (result) {
 
                 //const id = knex('utrs').select('codigo_utr').where('codigo_pivo', codigo_pivo).where('descricao', descricao).orderBy('codigo_utr', 'desc')
@@ -96,7 +75,6 @@ class UtrController {
 
                 create_string = create_string.substring(0, create_string.length - 2)
                 create_string += ' )'
->>>>>>> 44382a1eda7c1785f65fc5ff771ed7d2a3045ca2
 
                 await knex.raw(`CREATE TABLE ${now} ${create_string}`)
                 
