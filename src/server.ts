@@ -8,7 +8,7 @@ async function start() {
 
     setInterval(() => {
         routine.utrMinuteRoutine()
-    }, 5000)
+    }, 1000)
 }
 
 start()
