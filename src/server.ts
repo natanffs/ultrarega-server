@@ -3,12 +3,12 @@ import Routine from './controllers/RoutineController'
 
 async function start() {
     const app = new App()
-    await app.listen(3000)
+    await app.listen(3333)
     const routine = new Routine()
 
     setInterval(() => {
         routine.utrMinuteRoutine()
-    }, 5000)
+    }, 1000)
 }
 
 start()
