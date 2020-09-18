@@ -28,7 +28,7 @@ export class App {
     private middlewares() {
         this.app.use(express.json())
         this.app.use(express.urlencoded({ extended: true }))
-        //this.app.use(cors({ exposedHeaders: 'Authorization' }))
+        this.app.use(cors({ exposedHeaders: 'Authorization' }))
         this.app.use(morgan('dev'))
     }
 

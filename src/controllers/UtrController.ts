@@ -6,12 +6,35 @@ class UtrController {
         try {
             //Listar todas as utrs cadastradas
             //Listar todas as utrs de um usuário
-            //const utrs = await knex('utrs').select('*')
+            const cods = await knex('utrs').select('codigo_utr')
+            let utrs = []
 
-            const utrs = await knex('utrs')
-                .join('pivos', 'pivos.codigo_pivo', 'utrs.codigo_pivo')
-                .join('fazendas', 'fazendas.codigo_fazenda', 'pivos.codigo_fazenda')
-                .select('utrs.*', 'fazendas.nome_fazenda');
+            for (let i = 0; i < cods.length; i++) {
+                const codigo_utr = cods[i].codigo_utr
+                const calc = `utr_now_calc_${codigo_utr}`
+                const minutos = `utr_minutos_${codigo_utr}`
+                const utr = await knex('utrs')
+                    .join('pivos', 'pivos.codigo_pivo', 'utrs.codigo_pivo')
+                    .join('fazendas', 'fazendas.codigo_fazenda', 'pivos.codigo_fazenda')
+                    .join(calc, `${calc}.codigo_utr`, 'utrs.codigo_utr')
+                    .join('turnos_regas', 'turnos_regas.codigo_utr', 'utrs.codigo_utr')
+                    .join(minutos, `${minutos}.codigo_utr`, 'utrs.codigo_utr')
+                    .select(
+                        'utrs.*',
+                        'fazendas.nome_fazenda',
+                        'pivos.nome_pivo',
+                        `${calc}.codigo_utr`,
+                        `turnos_regas.*`,
+                        `${minutos}.posicao_angular`,
+                        `${minutos}.informacao_sentido`,
+                    ).where('utrs.codigo_utr', codigo_utr).first()
+
+                const calcs = await knex(calc).select('nome', 'valor', 'unidade_medida').where('codigo_utr', codigo_utr)
+                let tmp = utr
+                tmp = {...tmp, calcs}
+                console.log(tmp)
+                utrs.push(tmp)
+            }
 
             return res.json(utrs)
         } catch (error) {
@@ -23,17 +46,19 @@ class UtrController {
     async show(req: Request, res: Response) {
         try {
             const cod_utr = req.params.id
-            const calculados = `utr_now_calculados_${cod_utr}`
+            const calc = `utr_now_calc_${cod_utr}`
             const utr = await knex('utrs')
                 .join('pivos', 'pivos.codigo_pivo', 'utrs.codigo_pivo')
                 .join('fazendas', 'fazendas.codigo_fazenda', 'pivos.codigo_fazenda')
-                .join(calculados, `${calculados}.codigo_utr`, 'utrs.codigo_utr')
+                .join(calc, `${calc}.codigo_utr`, 'utrs.codigo_utr')
+                .join('turnos_regas', 'turnos_regas.codigo_utr', 'utrs.codigo_utr')
                 .select(
                     'utrs.*',
                     'fazendas.nome_fazenda',
-                    'pivos.nome',
-                    `${calculados}.codigo_utr`
-                ).where('codigo_utr', cod_utr).first()
+                    'pivos.nome_pivo',
+                    `${calc}.codigo_utr`,
+                    `turnos_regas.*`
+                ).where('utrs.codigo_utr', cod_utr).first()
 
             if (!utr) return res.status(400).json({ message: 'UTR não existente na base de dados' })
 
@@ -82,9 +107,6 @@ class UtrController {
                 create_string = create_string.substring(0, create_string.length - 2)
                 create_string += ' )'
 
-                await knex.raw(`CREATE TABLE ${now} ${create_string}`)
-
-                await knex(`${now}`).insert({ codigo_utr: result })
                 await knex.raw(`CREATE TABLE ${minutos} ${create_string}`)
             }
 

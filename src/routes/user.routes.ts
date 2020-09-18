@@ -7,7 +7,7 @@ const userController = new UserController();
 router
     .get('/users/', userController.index)
     .post('/users/', userController.store)
-    .get('/users/:id', userController.show)
+    .get('/users/:id/:param?', userController.show)
     .put('/users/:id', userController.update)
     .delete('/users/:id', userController.delete)
 

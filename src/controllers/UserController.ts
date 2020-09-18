@@ -33,11 +33,20 @@ class UserController {
     async show(req: Request, res: Response) {
         try {
             const userId = req.params.id
+            const { param } = req.params
+
             const user = await knex('usuarios').select('*').where('codigo_usuario', userId).first()
 
             if (!user) return res.status(400).json({ message: 'Usuário não existente na base de dados' })
-
             user.senha = undefined
+
+            if(param === 'permissions') {
+                const permissions = await knex('permissoes')
+                                                            .select('codigo_permissao')
+                                                            .join('usuarios_has_permissoes', 'usuarios_has_permissoes.codigo_permissao', 'permissoes.id')
+                                                            .where('usuarios_has_permissoes.codigo_usuario', userId)
+                return res.json(permissions)
+            }
 
             return res.json(user)
         } catch (error) {
