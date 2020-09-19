@@ -21,7 +21,7 @@ class AuthController {
             user.senha = undefined
             user.permissoes = permissions[0]
 
-            const token: string = jwt.sign({ id: user.codigo_usuario, permissions: user.permissoes }, process.env.SECRET || 'Be7Err@b4-v3rMelh@')
+            const token: string = jwt.sign({ id: user.id }, process.env.SECRET || 'beterraba-vermelha')
 
             return res.header('Authorization', `Bearer ${token}`).json({ user, token, permissions })
         } catch (error) {

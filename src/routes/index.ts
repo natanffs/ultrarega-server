@@ -18,6 +18,7 @@ import pivotAltimetryRoute from './pivotAltimetry.routes'
 import externalUserRoute from './externalUser.routes'
 import comandUtrRoute from './comandUtr.routes'
 import configUtrRoute from './configUtr.routes'
+import turnosRoute from './turnos.routes'
 
 
 export {
@@ -41,5 +42,5 @@ export {
     externalUserRoute as externalUser,
     comandUtrRoute as comandUtr,
     configUtrRoute as configUtr,
-        
+    turnosRoute as turnosRega,
 }

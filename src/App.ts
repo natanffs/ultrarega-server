@@ -57,6 +57,7 @@ export class App {
         this.app.use('/api', routes.externalUser)
         this.app.use('/api', routes.comandUtr)
         this.app.use('/api', routes.configUtr)
+        this.app.use('/api', routes.turnosRega)
     }
 
     private routes() {
