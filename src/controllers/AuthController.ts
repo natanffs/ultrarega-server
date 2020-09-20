@@ -14,14 +14,14 @@ class AuthController {
             if (!user || !await bcrypt.compare(req.body.password, user.senha)) return res.status(400).json({ message: 'Usuário ou senha incorretos' })
 
             const permissions = await knex('permissoes')
-                                                        .select('*')
+                                                        .select('permissoes.*')
                                                         .join('usuarios_has_permissoes', 'usuarios_has_permissoes.codigo_permissao', 'permissoes.id')
                                                         .where('usuarios_has_permissoes.codigo_usuario', user.codigo_usuario )
 
             user.senha = undefined
             user.permissoes = permissions[0]
 
-            const token: string = jwt.sign({ id: user.codigo_usuario, permissions: user.permissoes }, process.env.SECRET || 'Be7Err@b4-v3rMelh@')
+            const token: string = jwt.sign({ id: user.id }, process.env.SECRET || 'beterraba-vermelha')
 
             return res.header('Authorization', `Bearer ${token}`).json({ user, token, permissions })
         } catch (error) {
