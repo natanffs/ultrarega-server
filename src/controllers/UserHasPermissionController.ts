@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import knex from '../database/connection'
 import bcrypt from 'bcrypt'
 
+
 import { sendMessage } from '../websocket'
 import { alert } from 'src/routes'
 
@@ -16,8 +17,27 @@ class UserHasPermissionController {
 
     async index(req: Request, res: Response) {
         try {
-            const userHasPermission = await knex('usuarios_has_permissoes').select('*')
-            return res.json(userHasPermission)
+
+            const userId = req.params.id;
+
+            
+           
+            if(!userId || userId ===''){
+                const userHasPermission = await knex('usuarios_has_permissoes')
+                .select('*')
+                .join("usuarios", "usuarios.codigo_usuario", "usuarios_has_permissoes.codigo_usuario")
+                .join("permissoes","permissoes.id","usuarios_has_permissoes.codigo_permissao")
+                return res.json(userHasPermission)
+            }else{
+                const userHasPermission = await knex('usuarios_has_permissoes')
+                .select('*')
+                .join("usuarios", "usuarios.codigo_usuario", "usuarios_has_permissoes.codigo_usuario")
+                .join("permissoes","permissoes.id","usuarios_has_permissoes.codigo_permissao")
+                .where('codigo_usuario', userId)
+
+                return res.json(userHasPermission)
+            }
+           
         } catch (error) {
             console.log('Erro:', error)
             return res.json({ message: error })
