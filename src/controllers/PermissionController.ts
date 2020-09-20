@@ -19,6 +19,23 @@ class PermissionController {
         }
     }
 
+    async byUser(req: Request, res: Response) {
+        try {
+            // const { byUser } = req.params
+            //Listar todas as utrs cadastradas
+            //Listar todas as utrs de um usuário
+            // if(byUser) {
+            //     console.log
+            // }
+            const permissions = await knex('permissoes').select('*').where('', '')
+
+            return res.json(permissions)
+        } catch (error) {
+            console.log(error)
+            return res.json({ message: error })
+        }
+    }
+
     async show(req: Request, res: Response) {
         try {
             const cod_permission = req.params.id

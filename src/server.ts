@@ -6,9 +6,9 @@ async function start() {
     await app.listen(3000)
     const routine = new Routine()
 
-    // setInterval(() => {
-    //     routine.utrMinuteRoutine()
-    // }, 1000)
+    setInterval(() => {
+        routine.utrNowRoutineByUtr()
+    }, 5000)
 }
 
 start()
