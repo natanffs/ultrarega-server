@@ -6,7 +6,6 @@ import { sendMessage } from '../websocket'
 import { permission } from 'src/routes'
 
 interface userI {
-    id: number,
     nome: string,
     email: string,
     senha: string,
@@ -70,6 +69,7 @@ class UserController {
 
             const result = await knex('usuarios').select('*').where('email', user.email).first()
             sendMessage(null, 'new-insert', result)
+            console.log('aaaaaaaaaaaaa',result)
 
             return res.status(201).json({ message: 'Cadastrado realizado com sucesso!' })
         } catch (error) {
@@ -83,27 +83,27 @@ class UserController {
             const userId = req.params.id
             const userData: userI = req.body
             
-            if(userData.senha) {
-                const hash = await bcrypt.hash(userData.senha, 9)
-                userData.senha = hash
-            }
+            // if(userData.senha) {
+            //     const hash = await bcrypt.hash(userData.senha, 9)
+            //     userData.senha = hash
+            // }
 
-            if(userData.permissoes && userData.permissoes.length > 0) {
-                try {
-                    userData.permissoes.forEach(async p => {
-                        let permissao = {
-                            codigo_usuario: Number(userId),
-                            codigo_permissao: Number(p)
-                        }
-                        console.log('codigooooooooooooooo', p)
-                        await knex('usuarios_has_permissoes').insert(permissao)
-                        // await knex.raw(`INSERT INTO usuarios_has_permissoes (codigo_usuario, codigo_permissao) VALUES (${userId}, ${p}`)
-                    })
-                } catch (error) {
-                    console.log('Erro ao inserir permissões:', error)
-                }
-                userData.permissoes = undefined
-            }
+            // if(userData.permissoes && userData.permissoes.length > 0) {
+            //     try {
+            //         userData.permissoes.forEach(async p => {
+            //             let permissao = {
+            //                 codigo_usuario: Number(userId),
+            //                 codigo_permissao: Number(p)
+            //             }
+            //             console.log('codigooooooooooooooo', p)
+            //             await knex('usuarios_has_permissoes').insert(permissao)
+            //             // await knex.raw(`INSERT INTO usuarios_has_permissoes (codigo_usuario, codigo_permissao) VALUES (${userId}, ${p}`)
+            //         })
+            //     } catch (error) {
+            //         console.log('Erro ao inserir permissões:', error)
+            //     }
+            //     userData.permissoes = undefined
+            // }
 
             const user = await knex('usuarios').where('codigo_usuario', userId).update(userData)
 

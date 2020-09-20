@@ -26,6 +26,21 @@ class FarmController {
         }
     }
 
+    async getFarmByUserId(req: Request, res: Response) {
+        try {
+            const id = req.params.id
+            const farms = await knex('fazendas')
+            .join('fazendas_has_usuarios', 'fazendas_has_usuarios.codigo_fazenda', 'fazendas.codigo_fazenda')
+            .select('fazendas.*')
+            .where('fazendas_has_usuarios.codigo_usuario', id)
+
+            return res.json(farms)
+        } catch (error) {
+            console.log('Erro:', error)
+            return res.json({ message: error })
+        }
+    }
+
     async show(req: Request, res: Response) {
         try {
             const farmId = req.params.id
@@ -47,13 +62,7 @@ class FarmController {
             // if(farm.codigo_usuarios && farm.codigo_usuarios.length > 0) {
             //     try {
             //         farm.codigo_usuarios.forEach(async usrs => {
-            //             let permissao = {
-            //                 codigo_fazenda: Number(p)
-            //                 codigo_usuario: Number(userId),
-            //             }
-            //             console.log('codigooooooooooooooo', p)
-            //             await knex('usuarios_has_permissoes').insert(permissao)
-            //             // await knex.raw(`INSERT INTO usuarios_has_permissoes (codigo_usuario, codigo_permissao) VALUES (${userId}, ${p}`)
+                        
             //         })
             //     } catch (error) {
             //         console.log('Erro ao inserir permissões:', error)
