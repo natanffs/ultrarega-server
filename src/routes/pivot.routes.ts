@@ -5,7 +5,7 @@ const router = Router()
 const pivotController = new PivotController()
 
 router
-    .get('/pivots/', pivotController.index)
+    .get('/pivots/?:/id', pivotController.index)
     .post('/pivots/', pivotController.store)
     .get('/pivots/:id', pivotController.show)
     .put('/pivots/:id', pivotController.update)

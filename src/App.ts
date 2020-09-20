@@ -40,6 +40,7 @@ export class App {
     private privateRoutes() {
         /** Admin routes  */
         this.app.use('/api', routes.user)
+        this.app.use('/api', routes.userHasPermission)
         this.app.use('/api', routes.farm)
         this.app.use('/api', routes.farmHasUser)
         this.app.use('/api', routes.farmHasUtr)

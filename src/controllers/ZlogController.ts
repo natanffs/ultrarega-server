@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import knex from '../database/connection'
 
 class ZlogController {
+    
     async index(req: Request, res: Response) {
         try {
             //Listar todas as utrs cadastradas
@@ -41,9 +42,8 @@ class ZlogController {
     async store(req: Request, res: Response) {
         try {
             const log = req.body
-
         
-            await knex('ZLOG').insert(log, 'codigo_utr')
+            await knex('ZLOG').insert(log)
 
             return res.status(201).json({ message: 'Cadastrado realizado com sucesso!' })
         } catch (error) {

@@ -1,6 +1,7 @@
 import indexRoute from './index.routes'
 import authRoute from './auth.routes'
 import userRoute from './user.routes'
+import userHasPermissionRoute from './userHasPermission.routes'
 import farmRoute from './farm.routes'
 import farmHasUserRoute from './farmHasUser.routes'
 import farmHasUtrRoute from './farmHasUtr.routes'
@@ -25,6 +26,7 @@ export {
     indexRoute as index,
     authRoute as auth,
     userRoute as user,
+    userHasPermissionRoute as userHasPermission,
     farmRoute as farm,
     utrRoute as utr,
     utrMinuteRoute as utrMinute,
@@ -43,4 +45,5 @@ export {
     comandUtrRoute as comandUtr,
     configUtrRoute as configUtr,
     turnosRoute as turnosRega,
+    
 }
