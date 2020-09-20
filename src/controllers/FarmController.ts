@@ -70,7 +70,7 @@ class FarmController {
             //     userData.permissoes = undefined
             // }
 
-            await knex('fazendas').insert(farm)
+            const test = await knex('fazendas').insert(farm)
 
             return res.status(201).json({ message: 'Cadastrado realizado com sucesso!' })
         } catch (error) {
