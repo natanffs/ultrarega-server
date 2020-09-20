@@ -1,6 +1,15 @@
 import { Request, Response } from 'express'
 import knex from '../database/connection'
 
+interface modeloUtrI {
+    codigo_item: number
+    nome: string
+    tipo: string
+    visivel: string
+    fator_multiplicador: string
+    unidade_medida: string
+}
+
 class UtrController {
     async index(req: Request, res: Response) {
         try {
@@ -105,7 +114,7 @@ class UtrController {
                 const utr_now_fields_ids: number[] = req.body.codigo_itens
                 let create_string = ` ( codigo_utr_now INT NOT NULL AUTO_INCREMENT PRIMARY KEY, codigo_utr INT, `
 
-                let items = []
+                let items: modeloUtrI[] = []
 
                 for (var i = 0; i < utr_now_fields_ids.length; i++) {
                     const result = await knex('modelo_utr').select('codigo_item', 'nome', 'tipo', 'visivel', 'fator_multiplicador', 'unidade_medida').where('codigo_item', utr_now_fields_ids[i]).first()
@@ -133,13 +142,14 @@ class UtrController {
                     created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
                     updated_at datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
                 )`)
-                
+
                 const codigo_utr = last_codigo_utr + 1
-                items.push(codigo_utr)
+                //items.push(codigo_utr)
 
                 for (var i = 0; i < items.length; i++) {
                     await knex(now).insert(items[i])
                 }
+                await knex(now).update({ codigo_utr })
 
                 await knex.raw(`CREATE TABLE ${config} (
                     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -162,6 +172,8 @@ class UtrController {
                     created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
                     updated_at datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
                 )`)
+
+                
             }
 
             return res.status(201).json({ message: 'Cadastrado realizado com sucesso!' })
