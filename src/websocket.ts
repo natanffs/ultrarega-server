@@ -8,8 +8,6 @@ export const setupWebsocket = (server: Server) => {
     io = socketio(server)
 
     io.on('connection', socket => {
-        console.log(socket.id)
-
         connections.push({
             id: socket.id,
         })

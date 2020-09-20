@@ -4,8 +4,12 @@ import knex from '../database/connection'
 class PermissionController {
     async index(req: Request, res: Response) {
         try {
+            // const { byUser } = req.params
             //Listar todas as utrs cadastradas
             //Listar todas as utrs de um usuário
+            // if(byUser) {
+            //     console.log
+            // }
             const permissions = await knex('permissoes').select('*')
 
             return res.json(permissions)

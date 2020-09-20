@@ -1,6 +1,15 @@
 import { Request, Response } from 'express'
 import knex from '../database/connection'
 
+interface modeloUtrI {
+    codigo_item: number
+    nome: string
+    tipo: string
+    visivel: string
+    fator_multiplicador: string
+    unidade_medida: string
+}
+
 class UtrController {
     async index(req: Request, res: Response) {
         try {
@@ -47,28 +56,29 @@ class UtrController {
     async show(req: Request, res: Response) {
         try {
             const cod_utr = req.params.id
-            const calc = `utr_now_calc_${cod_utr}`
-            const minutos = `utr_minutos_${cod_utr}`
-            const utr = await knex('utrs')
-                .join('pivos', 'pivos.codigo_pivo', 'utrs.codigo_pivo')
-                .join('fazendas', 'fazendas.codigo_fazenda', 'pivos.codigo_fazenda')
-                .join(calc, `${calc}.codigo_utr`, 'utrs.codigo_utr')
-                .join('turnos_regas', 'turnos_regas.codigo_utr', 'utrs.codigo_utr')
-                .join(minutos, `${minutos}.codigo_utr`, 'utrs.codigo_utr')
-                .select(
-                    'utrs.*',
-                    'fazendas.nome_fazenda',
-                    'pivos.nome_pivo',
-                    `${calc}.codigo_utr`,
-                    `turnos_regas.*`,
-                    `${minutos}.posicao_angular`,
-                    `${minutos}.informacao_sentido`,
-                    `${minutos}.taxa_lamina_atual`
-                ).where('utrs.codigo_utr', cod_utr).first()
+            // const calc = `utr_now_calc_${cod_utr}`
+            // const minutos = `utr_minutos_${cod_utr}`
+            // const utr = await knex('utrs')
+            //     .join('pivos', 'pivos.codigo_pivo', 'utrs.codigo_pivo')
+            //     .join('fazendas', 'fazendas.codigo_fazenda', 'pivos.codigo_fazenda')
+            //     .join(calc, `${calc}.codigo_utr`, 'utrs.codigo_utr')
+            //     .join('turnos_regas', 'turnos_regas.codigo_utr', 'utrs.codigo_utr')
+            //     //.join(minutos, `${minutos}.codigo_utr`, 'utrs.codigo_utr')
+            //     .select(
+            //         'utrs.*',
+            //         'fazendas.nome_fazenda',
+            //         'pivos.nome_pivo',
+            //         `${calc}.codigo_utr`,
+            //         `turnos_regas.*`,
+            //     ).where('utrs.codigo_utr', cod_utr).first()
 
-            if (!utr) return res.status(400).json({ message: 'UTR não existente na base de dados' })
+            // if (!utr) return res.status(400).json({ message: 'UTR não existente na base de dados' })
 
-            return res.json(utr)
+            const now = `utr_now_${cod_utr}`
+            const config = `utr_config_${cod_utr}`
+            const utr_now_data = await knex(now).join(config, `${config}.codigo_item`, `${now}.codigo_item`).select(`${now}.*`)
+
+            return res.json(utr_now_data)
         } catch (error) {
             console.log(error)
             return res.json({ message: error })
@@ -104,7 +114,7 @@ class UtrController {
                 const utr_now_fields_ids: number[] = req.body.codigo_itens
                 let create_string = ` ( codigo_utr_now INT NOT NULL AUTO_INCREMENT PRIMARY KEY, codigo_utr INT, `
 
-                let items = []
+                let items: modeloUtrI[] = []
 
                 for (var i = 0; i < utr_now_fields_ids.length; i++) {
                     const result = await knex('modelo_utr').select('codigo_item', 'nome', 'tipo', 'visivel', 'fator_multiplicador', 'unidade_medida').where('codigo_item', utr_now_fields_ids[i]).first()
@@ -122,6 +132,7 @@ class UtrController {
 
                 await knex.raw(`CREATE TABLE ${now} (
                     codigo_item INT NOT NULL PRIMARY KEY,
+                    codigo_utr int,
                     nome varchar(255),
                     tipo varchar(255),
                     visivel varchar(255),
@@ -132,9 +143,13 @@ class UtrController {
                     updated_at datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
                 )`)
 
+                const codigo_utr = last_codigo_utr + 1
+                //items.push(codigo_utr)
+
                 for (var i = 0; i < items.length; i++) {
                     await knex(now).insert(items[i])
                 }
+                await knex(now).update({ codigo_utr })
 
                 await knex.raw(`CREATE TABLE ${config} (
                     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -157,6 +172,8 @@ class UtrController {
                     created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
                     updated_at datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
                 )`)
+
+                
             }
 
             return res.status(201).json({ message: 'Cadastrado realizado com sucesso!' })

@@ -5,7 +5,7 @@ const router = Router();
 const permissionController = new PermissionController();
 
 router
-    .get('/permissions/', permissionController.index)
+    .get('/permissions/:byUser?', permissionController.index)
     .post('/permissions/', permissionController.store)
     .get('/permissions/:id', permissionController.show)
     .put('/permissions/:id', permissionController.update)
