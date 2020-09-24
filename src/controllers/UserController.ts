@@ -39,11 +39,11 @@ class UserController {
             if (!user) return res.status(400).json({ message: 'Usuário não existente na base de dados' })
             user.senha = undefined
 
-            if(param === 'permissions') {
+            if (param === 'permissions') {
                 const permissions = await knex('permissoes')
-                                                            .select('codigo_permissao')
-                                                            .join('usuarios_has_permissoes', 'usuarios_has_permissoes.codigo_permissao', 'permissoes.id')
-                                                            .where('usuarios_has_permissoes.codigo_usuario', userId)
+                    .select('codigo_permissao')
+                    .join('usuarios_has_permissoes', 'usuarios_has_permissoes.codigo_permissao', 'permissoes.id')
+                    .where('usuarios_has_permissoes.codigo_usuario', userId)
                 return res.json(permissions)
             }
 
@@ -56,7 +56,7 @@ class UserController {
 
     async store(req: Request, res: Response) {
         try {
-            const user: userI = req.body
+            const { user, permissions } = req.body
 
             const hasUser = await knex('usuarios').select('email').where('email', user.email).first()
 
@@ -65,11 +65,15 @@ class UserController {
             const hash = await bcrypt.hash(user.senha, 9)
             user.senha = hash
 
-            await knex('usuarios').insert(user)
+            const codigo_usuario = await knex('usuarios').insert(user).returning('codigo_usuario')
 
-            const result = await knex('usuarios').select('*').where('email', user.email).first()
-            sendMessage(null, 'new-insert', result)
-            console.log('aaaaaaaaaaaaa',result)
+            for (var i = 0; i < permissions.length; i++) {
+                await knex('usuarios_has_permissoes').insert({ codigo_usuario, codigo_permissao: permissions[i] })
+            }
+
+            // const result = await knex('usuarios').select('*').where('email', user.email).first()
+            // sendMessage(null, 'new-insert', result)
+            // console.log('aaaaaaaaaaaaa',result)
 
             return res.status(201).json({ message: 'Cadastrado realizado com sucesso!' })
         } catch (error) {
@@ -82,7 +86,7 @@ class UserController {
         try {
             const userId = req.params.id
             const userData: userI = req.body
-            
+
             // if(userData.senha) {
             //     const hash = await bcrypt.hash(userData.senha, 9)
             //     userData.senha = hash

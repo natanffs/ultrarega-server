@@ -36,9 +36,52 @@ class UtrController {
                 const calcs = await knex(calc).select('nome', 'unidade_medida', 'valor').where('codigo_utr', codigo_utr)
                 const nows = await knex(now).select('nome', 'fator_multiplicador', 'unidade_medida', 'valor')
 
+                let tmp = { ...utr, calcs, nows }
+
+                console.log(tmp)
+                utrs.push(tmp)
+            }
+
+            return res.json(utrs)
+        } catch (error) {
+            console.log(error)
+            return res.json({ message: error })
+        }
+    }
+
+    async byUser(req: Request, res: Response) {
+        try {
+            //Listar todas as utrs cadastradas
+            //Listar todas as utrs de um usuário
+            const cods = await knex('utrs')
+                .join('pivos', 'pivos.codigo_pivo', 'utrs.codigo_pivo')
+                .join('fazendas_has_usuarios', 'fazendas_has_usuarios.codigo_fazenda', 'pivos.codigo_fazenda')
+                .where('fazendas_has_usuarios.codigo_usuario', req.params.id)
+                .groupBy('utrs.codigo_utr')
+                .select('codigo_utr')
+            let utrs = []
+
+            for (let i = 0; i < cods.length; i++) {
+                const codigo_utr = cods[i].codigo_utr
+                const calc = `utr_now_calc_${codigo_utr}`
+                const now = `utr_now_${codigo_utr}`
+                const utr = await knex('utrs')
+                    .join('pivos', 'pivos.codigo_pivo', 'utrs.codigo_pivo')
+                    .join('fazendas', 'fazendas.codigo_fazenda', 'pivos.codigo_fazenda')
+                    .join('turnos_regas', 'turnos_regas.codigo_utr', 'utrs.codigo_utr')
+                    .select(
+                        'utrs.*',
+                        'fazendas.nome_fazenda',
+                        'pivos.nome_pivo',
+                        `turnos_regas.*`
+                    ).where('utrs.codigo_utr', codigo_utr).first()
+
+                const calcs = await knex(calc).select('nome', 'unidade_medida', 'valor').where('codigo_utr', codigo_utr)
+                const nows = await knex(now).select('nome', 'fator_multiplicador', 'unidade_medida', 'valor')
+
                 let tmp = utr
                 tmp = { ...tmp, calcs, nows }
-                
+
                 console.log(tmp)
                 utrs.push(tmp)
             }

@@ -31,7 +31,7 @@ class RoutineController {
             utr_datas.push(udata)
         }
 
-        console.log(utr_datas)
+        //console.log(utr_datas)
         sendMessage(null, 'utrs-updates', utr_datas)
     }
 }

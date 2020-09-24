@@ -6,6 +6,7 @@ const utrController = new UtrController()
 
 router
     .get('/utrs', utrController.index)
+    .get('/utrsbyUser/:id', utrController.byUser)
     .post('/utrs/', utrController.store)
     .get('/utrs/:id', utrController.show)
     .put('/utrs/:id', utrController.update)

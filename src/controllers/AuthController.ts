@@ -17,6 +17,7 @@ class AuthController {
                                                         .select('permissoes.*')
                                                         .join('usuarios_has_permissoes', 'usuarios_has_permissoes.codigo_permissao', 'permissoes.id')
                                                         .where('usuarios_has_permissoes.codigo_usuario', user.codigo_usuario )
+                                                        .groupBy('permissoes.id')
 
             user.senha = undefined
             user.permissoes = permissions[0]
