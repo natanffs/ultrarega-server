@@ -24,7 +24,7 @@ class RoutineController {
 
         const utr_datas = []
 
-        for(var i=0; i<utrsCodes.length; i++) {
+        for (var i = 0; i < utrsCodes.length; i++) {
             const now = `utr_now_${utrsCodes[i].codigo_utr}`
             const config = `utr_config_${utrsCodes[i].codigo_utr}`
             const udata = await knex(now).join(config, `${config}.codigo_item`, `${now}.codigo_item`).select(`${now}.*`)
