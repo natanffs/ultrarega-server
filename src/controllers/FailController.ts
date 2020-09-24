@@ -1,3 +1,12 @@
+/**
+ * Controller de falhas, na qual contem os métodos:
+ *  Index - Mostrar todos os dados de falhas,
+ *  Show - Mostra um dado específico. Indice passado por meio de query params
+ *  Store - Faz a insersão de dados
+ *  Update - Responsável pela atualização de dados. Indice passado por meio de query params
+ *  Delete - Remoção dos dados. Indice passado por meio de query params
+ *  Ambos os métodos fazem uso do KNEX para inserção de dados, e em caso de sucesso ou erro retornam um JSON com uma mensagem ao Front End.
+ */
 import { Request, Response } from 'express'
 import knex from '../database/connection'
 import bcrypt from 'bcrypt'
@@ -37,16 +46,11 @@ class FailController {
 
     async store(req: Request, res: Response) {
         try {
-            const {descricao} = req.body
-            const dadosLog = req.body.dadosLog
+            const falhas = req.body
 
-            const fail = descricao;
-           
-            /*await knex('falhas').insert(fail)
-            await knex('zlog').insert(dadosLog)
+            await knex('falhas').insert(falhas)
 
-            return res.status(201).json({ message: 'Cadastrado realizado com sucesso!' })*/
-            return res.json({ message: dadosLog })
+            return res.status(201).json({ message: 'Cadastrado realizado com sucesso!' })
         } catch (error) {
             console.log('Erro:', error)
             return res.json({ message: error })
