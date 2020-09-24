@@ -30,9 +30,9 @@ class FarmController {
         try {
             const id = req.params.id
             const farms = await knex('fazendas')
-            .join('fazendas_has_usuarios', 'fazendas_has_usuarios.codigo_fazenda', 'fazendas.codigo_fazenda')
-            .select('fazendas.*')
-            .where('fazendas_has_usuarios.codigo_usuario', id)
+                .join('fazendas_has_usuarios', 'fazendas_has_usuarios.codigo_fazenda', 'fazendas.codigo_fazenda')
+                .select('fazendas.*')
+                .where('fazendas_has_usuarios.codigo_usuario', id)
 
             return res.json(farms)
         } catch (error) {
@@ -57,20 +57,15 @@ class FarmController {
 
     async store(req: Request, res: Response) {
         try {
-            const farm = req.body
+            const { farm, users } = req.body
 
-            // if(farm.codigo_usuarios && farm.codigo_usuarios.length > 0) {
-            //     try {
-            //         farm.codigo_usuarios.forEach(async usrs => {
-                        
-            //         })
-            //     } catch (error) {
-            //         console.log('Erro ao inserir permissões:', error)
-            //     }
-            //     userData.permissoes = undefined
-            // }
+            const codigo_fazenda = await knex('fazendas').insert(farm).returning('codigo_fazenda')
 
-            const test = await knex('fazendas').insert(farm)
+            if(users) {
+                for (var i = 0; i < users.length; i++) {
+                    await knex('fazendas_has_usuarios').insert({ codigo_fazenda, codigo_usuario: users[i] })
+                }
+            }
 
             return res.status(201).json({ message: 'Cadastrado realizado com sucesso!' })
         } catch (error) {
@@ -84,7 +79,7 @@ class FarmController {
             const farmId = req.params.id
             let farmData = req.body
 
-            if(farmData.codigo_usuarios) {
+            if (farmData.codigo_usuarios) {
                 try {
                     farmData.codigo_usuarios.forEach(async usr => {
                         let rel = {
@@ -100,13 +95,13 @@ class FarmController {
                 }
                 farmData.codigo_usuarios = undefined
             }
-            
+
             const farm = await knex('fazendas').where('codigo_fazenda', farmId).update(farmData)
 
             if (!farm) return res.status(400).json({ message: 'Fazenda não existente na base de dados' })
 
-            return res.json({ message: 'Dados atualizados com sucesso!'})
-            
+            return res.json({ message: 'Dados atualizados com sucesso!' })
+
         } catch (error) {
             console.log('Erro:', error)
             return res.json({ message: error })

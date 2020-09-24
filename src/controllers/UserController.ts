@@ -67,8 +67,10 @@ class UserController {
 
             const codigo_usuario = await knex('usuarios').insert(user).returning('codigo_usuario')
 
-            for (var i = 0; i < permissions.length; i++) {
-                await knex('usuarios_has_permissoes').insert({ codigo_usuario, codigo_permissao: permissions[i] })
+            if (permissions) {
+                for (var i = 0; i < permissions.length; i++) {
+                    await knex('usuarios_has_permissoes').insert({ codigo_usuario, codigo_permissao: permissions[i] })
+                }
             }
 
             // const result = await knex('usuarios').select('*').where('email', user.email).first()
