@@ -1,3 +1,6 @@
+/**
+ * Arquivo que impede o acesso à rota sem a devida autenticação
+*/
 import { Router } from 'express'
 
 const router = Router()
