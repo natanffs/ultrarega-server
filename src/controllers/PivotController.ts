@@ -1,8 +1,8 @@
 /**
- * Controller de Pivos, na qual contem os métodos:
+ * Controller de Pivos, na qual contém os métodos:
  *  Index - Mostrar todos os dados,
  *  Show - Mostra um dado específico. Indice passado por meio de query params
- *  Store - Faz a insersão de dados
+ *  Store - Faz a inserção de dados
  *  Update - Responsável pela atualização de dados. Indice passado por meio de query params
  *  Delete - Remoção dos dados. Indice passado por meio de query params
  *  Ambos os métodos fazem uso do KNEX para inserção de dados, e em caso de sucesso ou erro retornam um JSON com uma mensagem ao Front End.
