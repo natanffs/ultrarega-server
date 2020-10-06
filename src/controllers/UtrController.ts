@@ -119,6 +119,7 @@ class UtrController {
 
             let now = `utr_now_${last_codigo_utr + 1}`
             let config = `utr_config_${last_codigo_utr + 1}`
+            let comandos = `utr_now_comandos_${last_codigo_utr + 1}`
             let calc = `utr_now_calc_${last_codigo_utr + 1}`
             let minutos = `utr_minutos_${last_codigo_utr + 1}`
 
@@ -181,8 +182,19 @@ class UtrController {
                 )`)
 
                 for (var i = 0; i < itens_visiveis.length; i++) {
-                    await knex(config).insert({ codigo_utr: last_codigo_utr + 1, codigo_item: itens_visiveis[i] })
+                    await knex(config).insert({ codigo_utr: last_codigo_utr + 1, codigo_item: itens_visiveis[i].codigo_item, ordem_item: itens_visiveis[i].ordem_item })
                 }
+
+                await knex.raw(`CREATE TABLE ${comandos} (
+                    codigo_utr_comandos INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                    codigo_utr INT,
+                    data_hora datetime,
+                    comando_sentido varchar(255),
+                    comando_booster varchar(255),
+                    comando_injetora varchar(255),
+                    comando_ligar_desligar varchar(255),
+                    comando_ligar_sem_agua varchar(255)
+                )`)
 
                 await knex.raw(`CREATE TABLE ${calc} (
                     codigo_utr_now_calc int primary key auto_increment,
