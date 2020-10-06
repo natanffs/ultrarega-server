@@ -1,3 +1,9 @@
+/**
+ *  Arquivo que faz a importação de todas as rotas, e as exporta para que as mesmas possam 
+ * ser acessadas pela aplicação Frontend
+
+*/
+
 import indexRoute from './index.routes'
 import authRoute from './auth.routes'
 import userRoute from './user.routes'

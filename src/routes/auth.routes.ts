@@ -1,3 +1,10 @@
+/**
+ * Rotas do sistema, que faz a conexão com frontend:
+ ** rota responsável por fazer o registro e login do usuário no sistema, através do Authcontroller
+*/
+
+
+
 import { Router } from 'express'
 import AuthController from '../controllers/AuthController'
 import UserController from '../controllers/UserController'
