@@ -20,6 +20,7 @@ class UtrController {
 
             for (let i = 0; i < cods.length; i++) {
                 const codigo_utr = cods[i].codigo_utr
+                const config = `utr_config_${codigo_utr}`
                 const calc = `utr_now_calc_${codigo_utr}`
                 const now = `utr_now_${codigo_utr}`
                 const utr = await knex('utrs')
@@ -32,9 +33,13 @@ class UtrController {
                         'pivos.nome_pivo',
                         `turnos_regas.*`
                     ).where('utrs.codigo_utr', codigo_utr).first()
+                    console.log(utr)
 
                 const calcs = await knex(calc).select('nome', 'unidade_medida', 'valor').where('codigo_utr', codigo_utr)
-                const nows = await knex(now).select('nome', 'fator_multiplicador', 'unidade_medida', 'valor')
+                const nows = await knex(now)
+                    .join(config, `${config}.codigo_item`, `${now}.codigo_item`)
+                    .select('nome', 'fator_multiplicador', 'unidade_medida', 'valor')
+                    .orderBy(`${config}.ordem_item`, 'asc')
 
                 let tmp = { ...utr, calcs, nows }
 
@@ -63,6 +68,7 @@ class UtrController {
 
             for (let i = 0; i < cods.length; i++) {
                 const codigo_utr = cods[i].codigo_utr
+                const config = `utr_config_${codigo_utr}`
                 const calc = `utr_now_calc_${codigo_utr}`
                 const now = `utr_now_${codigo_utr}`
                 const utr = await knex('utrs')
@@ -75,9 +81,12 @@ class UtrController {
                         'pivos.nome_pivo',
                         `turnos_regas.*`
                     ).where('utrs.codigo_utr', codigo_utr).first()
-
+                
                 const calcs = await knex(calc).select('nome', 'unidade_medida', 'valor').where('codigo_utr', codigo_utr)
-                const nows = await knex(now).select('nome', 'fator_multiplicador', 'unidade_medida', 'valor')
+                const nows = await knex(now)
+                    .join(config, `${config}.codigo_item`, `${now}.codigo_item`)
+                    .select('nome', 'fator_multiplicador', 'unidade_medida', 'valor')
+                    .orderBy(`${config}.ordem_item`, 'asc')
 
                 let tmp = utr
                 tmp = { ...tmp, calcs, nows }
@@ -178,7 +187,8 @@ class UtrController {
                 await knex.raw(`CREATE TABLE ${config} (
                     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                     codigo_utr INT,
-                    codigo_item INT
+                    codigo_item INT,
+                    ordem_item INT
                 )`)
 
                 for (var i = 0; i < itens_visiveis.length; i++) {

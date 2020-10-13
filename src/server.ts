@@ -7,9 +7,9 @@ async function start() {
     const routine = new Routine()
 
     /** Função que monitora o banco de dados e envia para o front end a cada 60 segundos */
-    setInterval(() => {
-        routine.utrNowRoutineByUtr()
-    }, 60000)
+    // setInterval(() => {
+    //     routine.utrNowRoutineByUtr()
+    // }, 60000)
 }
 
 start()
